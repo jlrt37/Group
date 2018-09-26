@@ -1,0 +1,41 @@
+body {
+    margin-top: 75px;
+    margin-bottom: 75px;
+    background-image: url("../images/background.png");
+    text-align: center;
+    font-family: "Dosis";
+}
+
+.container {
+    width: 100%;
+    position: relative;
+}
+
+h1 {
+    font-family: "Chicle";
+    font-size: 55px;
+    color: #86C232;
+    background-color: #222629;
+}
+
+#sidePanel {
+    color: #61892F;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#mainContent {
+    background-color: #474B4F;
+    width: 83%;
+    z-index: -10;
+    position: absolute;
+}
+
+#tableArea {
+    background-color: #fff;
+    width: 70%;
+    z-index: 10;
+    position: absolute;
+}
