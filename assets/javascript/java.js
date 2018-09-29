@@ -11,7 +11,7 @@ $("#search").on("click", function (e) {
     if
     ($("#lyric").prop("checked") === true && $("#title").prop("checked") === false) {
 
-        artistName = $("#userText").val().trim();
+        artistName = $("#action-input").val().trim();
         //$("#display").text("Lyrics related to " + searchTerm);
         $.ajax({
             url: lastFMUrl + "&track=''&artist=" + artistName + "&format=json",
@@ -27,74 +27,86 @@ $("#search").on("click", function (e) {
                 $("#display").append(item, infoButton);
             }
             $(".moreInfo").on("click", function () {
-                var songTrack = $(this).attr("id");
-                var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack + "&apikey=049b063ff03b0f33187a018887d8bb0f"
-            
+                var songTrack = $(this).attr("id").replace(" ", "%20");
+                var songArtist = $(this).attr("artist").replace(" ", "%20");
+                var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack + "&q_artist=" + songArtist + "&apikey=049b063ff03b0f33187a018887d8bb0f"
+
                 $.ajax({
                     url: queryURL,
                     method: "GET"
                 }).then(function (response) {
                     //console.log(response);
                     var obj = JSON.parse(response)
-                    console.log(obj.message.body.lyrics.lyrics_body)
+                    console.log(obj.message.body.lyrics.lyrics_body);
+                    
+                        // var lyricBody = $('<tb>');
+                        // lyricBody.text(obj.message.body.lyrics.lyrics_body);
+                        // $('#display').append(lyricBody);
+                    });
+                });
+            })};
+        
+        if ($("#title").prop("checked") === true && $("#lyric").prop("checked") === false) {
+            trackName = $("#action-input").val().trim();
+
+            $.ajax({
+                url: lastFMUrl + "&track=" + trackName + "&format=json",
+                method: "GET",
+            }).then(function (response) {
+                console.log(response.results.trackmatches.track);
+                for (x = 0; x < response.results.trackmatches.track.length; x++) {
+                    var item = $('<tr id=response.results.trackmatches.track[x].artist>');
+                    var infoButton = $('<button class="moreInfo">more info</button>' + '<br>');
+                    infoButton.attr("id", response.results.trackmatches.track[x].name);
+                    infoButton.attr("artist", response.results.trackmatches.track[x].artist);
+                    item = response.results.trackmatches.track[x].name;
+                    $("#display").append(item, infoButton);
+
+
+                }
+                $(".moreInfo").on("click", function () {
+                    var songTrack = $(this).attr("id").replace(" ", "%20");
+                    var songArtist = $(this).attr("artist").replace(" ", "%20");
+                    var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack + "&q_artist=" + songArtist + "&apikey=049b063ff03b0f33187a018887d8bb0f"
+
+                    $.ajax({
+                        url: queryURL,
+                        method: "GET"
+                    }).then(function (response) {
+                        // console.log(response);
+                        var obj = JSON.parse(response);
+                        console.log(obj.message.body.lyrics.lyrics_body);
+                        // if ($(this).attr("artist") === item.attr("id")) {
+                        //     var lyricBody = $('<tb>');
+                        //     lyricBody.text(obj.message.body.lyrics.lyrics_body);
+                        //     $('#display').append(lyricBody);
+                        }
+                    );
                 });
             });
-        });
-    }
-    else if ($("#title").prop("checked") === true && $("#lyric").prop("checked") === false) {
-        trackName = $("#userText").val().trim();
+        };
+        if ($("#title").prop("checked") === false && $("#lyric").prop("checked") === false) {
+            console.log("check one");
+        }
+        else if ($("#title").prop("checked") === true && $("#lyric").prop("checked") === true) {
+            console.log("check one!");
+        }
+    
 
-        $.ajax({
-            url: lastFMUrl + "&track=" + trackName + "&format=json",
-            method: "GET",
-        }).then(function (response) {
-            console.log(response.results.trackmatches.track);
-            for (x = 0; x < response.results.trackmatches.track.length; x++) {
-                var item = $('<tr>');
-                var infoButton = $('<button class="moreInfo">more info</button>' + '<br>');
-                infoButton.attr("id", response.results.trackmatches.track[x].name);
-                infoButton.attr("artist", response.results.trackmatches.track[x].artist);
-                item = response.results.trackmatches.track[x].name;
-                $("#display").append(item, infoButton);
-               
+    // $(".moreInfo").on("click", function () {
+    //     var songTrack = $(this).attr("id");
+    //     var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack.val() + "&apikey=049b063ff03b0f33187a018887d8bb0f"
 
-            }
-            $(".moreInfo").on("click", function () {
-                var songTrack = $(this).attr("id");
-                var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack + "&apikey=049b063ff03b0f33187a018887d8bb0f"
-            
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                }).then(function (response) {
-                   // console.log(response);
-                    var obj = JSON.parse(response)
-                    console.log(obj.message.body.lyrics.lyrics_body)
-                });
-            });
-        });
-    };
-    if ($("#title").prop("checked") === false && $("#lyric").prop("checked") === false) {
-        console.log("check one");
-    }
-    else if ($("#title").prop("checked") === true && $("#lyric").prop("checked") === true) {
-        console.log("check one!");
-    }
-});
-
-$(".moreInfo").on("click", function () {
-    var songTrack = $(this).attr("id");
-    var queryURL = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=" + songTrack.val() + "&apikey=049b063ff03b0f33187a018887d8bb0f"
-
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
-        var obj = JSON.parse(response)
-        console.log(obj.message.body.lyrics.lyrics_body)
-    });
-});
+    //     $.ajax({
+    //         url: queryURL,
+    //         method: "GET"
+    //     }).then(function (response) {
+    //         console.log(response);
+    //         var obj = JSON.parse(response)
+    //         console.log(obj.message.body.lyrics.lyrics_body)
+    //     });
+    // });
+})
 //    //console.log(response.body.lyrics.lyrics_body);
 // //   console.log(response.)
 //    $("#display").text("result: " + obj.message.body.lyrics.lyrics_body)
