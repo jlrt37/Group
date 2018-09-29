@@ -1,0 +1,23 @@
+
+AXIOS link --
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+musicxmatch/lyricwiki info
+ user name is jlrt37
+password is Hnvqwf12!
+KU Bootcamp Student's App    049b063ff03b0f33187a018887d8bb0f  
+
+var queryURL = "http://api.musixmatch.com/ws/1.0/track.search?f_has_lyrics&page_size=5&api_key=049b063ff03b0f33187a018887d8bb0f"
+	    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+      console.log(response);
+    });
+
+musixmatch root API
+http://api.musixmatch.com/ws/1.1/
+
+last.fm root API
+http://ws.audioscrobbler.com/2.0/
+key = 89797b222e5b4d2d93ff19e4b83e21e4
+secret = 4b717b88d243c0f93d45108d1727ef7c
